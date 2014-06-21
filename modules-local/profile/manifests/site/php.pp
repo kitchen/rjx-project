@@ -10,10 +10,13 @@
 #   the documentroot for the site
 # [*user*]
 #   the user to run the site under
+#   also the mysql username
 # [*serveraliases*]
 #   A list of other names this site responds to
 # [*fpm_port*]
 #   the port for the fpm listener to listen on
+# [*database_password*]
+#   password for the mysql database
 #
 # === Caveats
 #
@@ -38,9 +41,11 @@ define profile::site::php (
   $docroot,
   $user,
   $fpm_port,
+  $database_password,
 ) {
   include profile::apache
   include profile::fpm
+  include php::extension::mysql
 
   # WARNING: portability
   #$fpm_sock_file = "/var/run/php_fpm_socket_${user}_${name}"
@@ -58,8 +63,11 @@ define profile::site::php (
     listen => "127.0.0.1:${fpm_port}",
     user => $user,
   }
-    
 
-
-
+  mysql::db { $name:
+    user => $user,
+    host => 'localhost',
+    password => $database_password,
+    grant => [ 'ALL' ],
+  }
 }
