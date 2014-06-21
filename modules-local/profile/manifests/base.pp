@@ -13,9 +13,10 @@
 class profile::base {
   include sudo
 
-  $base_packages = [
-    'vim-nox', 'zsh', 'git'
-  ]
+  $base_packages = $osfamily ? {
+    'Debian' => [ 'vim-nox', 'zsh', 'git', 'bundler'],
+    'RedHat' => [ 'vim-enhanced', 'zsh', 'git', 'rubygem-bundler'],
+  }
 
   package { $base_packages: }
 
