@@ -1,0 +1,9 @@
+---
+:backends:
+  - yaml
+:yaml:
+  :datadir: hiera
+:hierarchy:
+  - node/%{fqdn}
+  - environment/%{environment}
+  - global
